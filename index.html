@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Test de diagnóstico inicial — SENSO Consultora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --azul: #181349;
+    --celeste: #96c3ff;
+    --celeste-light: #e8f2ff;
+    --naranja: #fd4c1d;
+    --naranja-light: #fff0ec;
+    --humo: #f4f4f4;
+    --blanco: #ffffff;
+    --texto: #181349;
+    --texto-suave: #4a4868;
+    --borde: #dde3f0;
+    --font: 'Space Grotesk', sans-serif;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: var(--font);
+    background-color: var(--humo);
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  .site-header {
+    background: var(--azul);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo-text {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--celeste);
+    letter-spacing: -0.5px;
+    text-transform: lowercase;
+  }
+  .logo-text span {
+    color: var(--celeste);
+  }
+  .logo-sub {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--humo);
+    letter-spacing: 0.12em;
+    margin-top: 1px;
+  }
+
+  /* Main */
+  main {
+    flex: 1;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* Page title */
+  .page-title {
+    margin-bottom: 2rem;
+  }
+  .page-title h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--azul);
+    line-height: 1.25;
+    margin-bottom: 0.4rem;
+  }
+  .page-title p {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--texto-suave);
+    letter-spacing: 0.04em;
+  }
+
+  /* Aviso */
+  .notice {
+    background: var(--blanco);
+    border-left: 3px solid var(--naranja);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .notice p {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--texto-suave);
+    line-height: 1.65;
+    margin-bottom: 0.5rem;
+  }
+  .notice p:last-child { margin-bottom: 0; }
+  .notice strong { font-weight: 600; color: var(--azul); }
+
+  /* Screens */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 2rem; }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+  }
+  .progress-track {
+    height: 3px;
+    background: var(--borde);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--naranja);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  /* Section header */
+  .section-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--borde);
+  }
+  .section-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--naranja);
+    margin-bottom: 0.4rem;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--azul);
+    line-height: 1.3;
+  }
+  .section-count {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--texto-suave);
+    margin-top: 0.25rem;
+  }
+
+  /* Subarista */
+  .subarista-block { margin-bottom: 2rem; }
+  .subarista-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--borde);
+    margin-bottom: 1rem;
+  }
+
+  /* Question */
+  .question-card {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.15s;
+  }
+  .question-card.unanswered {
+    border-color: var(--naranja);
+    background: var(--naranja-light);
+  }
+  .question-num {
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--texto-suave);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.04em;
+  }
+  .question-text {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--azul);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  /* Scale options */
+  .scale-options {
+    display: flex;
+    gap: 5px;
+  }
+  .scale-option { flex: 1; min-width: 0; }
+  .scale-option input[type="radio"] { display: none; }
+  .scale-option label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 3px;
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--texto-suave);
+    transition: all 0.12s;
+    min-height: 56px;
+    background: var(--humo);
+  }
+  .scale-option label:hover {
+    border-color: var(--celeste);
+    background: var(--celeste-light);
+  }
+  .scale-option input:checked + label {
+    background: var(--azul);
+    border-color: var(--azul);
+    color: var(--blanco);
+    font-weight: 500;
+  }
+  .scale-num {
+    font-size: 15px;
+    font-weight: 600;
+    display: block;
+    line-height: 1;
+  }
+  .scale-option input:checked + label .scale-num {
+    color: var(--celeste);
+  }
+
+  /* Form fields */
+  .field-group { margin-bottom: 1.25rem; }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--azul);
+    margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--azul);
+    background: var(--blanco);
+    transition: border-color 0.15s;
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--azul);
+  }
+  .field-input::placeholder { color: #aab0c6; }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 12px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 22px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1.5px solid var(--borde);
+    background: var(--blanco);
+    color: var(--texto-suave);
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+  .btn:hover { border-color: var(--azul); color: var(--azul); background: var(--celeste-light); }
+  .btn-primary {
+    background: var(--azul);
+    border-color: var(--azul);
+    color: var(--blanco);
+  }
+  .btn-primary:hover { background: #0f0c33; border-color: #0f0c33; color: var(--blanco); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .arrow { font-size: 16px; }
+
+  /* Error msg */
+  .error-msg {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--naranja);
+    margin-top: 0.75rem;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  /* Intro screen */
+  .intro-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--naranja);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Thanks screen */
+  .thanks-wrap {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+  .thanks-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--azul);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+  .thanks-icon svg { width: 26px; height: 26px; }
+  .thanks-wrap h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--azul);
+    margin-bottom: 1rem;
+  }
+  .thanks-wrap p {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--texto-suave);
+    line-height: 1.7;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+  .thanks-accent {
+    display: inline-block;
+    width: 32px;
+    height: 3px;
+    background: var(--naranja);
+    border-radius: 2px;
+    margin: 1.25rem auto;
+  }
+
+  /* Footer */
+  .site-footer {
+    background: var(--azul);
+    text-align: center;
+    padding: 1rem;
+    font-size: 11px;
+    font-weight: 300;
+    color: #7a7a9d;
+    letter-spacing: 0.05em;
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    .scale-option label { font-size: 10px; min-height: 52px; padding: 6px 2px; }
+    .scale-num { font-size: 13px; }
+    main { padding: 1.5rem 1rem 3rem; }
+    .page-title h1 { font-size: 21px; }
+    .btn { padding: 10px 16px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <div class="logo-text">.senso</div>
+    <div class="logo-sub">Consultora</div>
+  </div>
+</header>
+
+<main>
+
+<!-- PANTALLA INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="page-title">
+    <div class="intro-badge">Diagnóstico inicial</div>
+    <h1>Test de diagnóstico inicial sobre habilidades de liderazgo</h1>
+    <p>Mentoría 1:1 — senso Consultora</p>
+  </div>
+
+  <div class="notice">
+    <p><strong>Respondé en función de cómo actuás hoy</strong>, no de cómo te gustaría actuar o cómo pensás que deberías hacerlo. Cuanto más honesta sea tu respuesta, más útil va a ser el diagnóstico.</p>
+    <p>No hay respuestas correctas ni incorrectas. Los resultados los vamos a revisar juntos en el primer encuentro. Lo que importa no es el resultado en sí, sino lo que surja cuando lo pongamos en conversación.</p>
+  </div>
+
+  <div class="field-group">
+    <label class="field-label" for="inp-nombre">Nombre completo</label>
+    <input id="inp-nombre" class="field-input" type="text" placeholder="Tu nombre y apellido" autocomplete="off" maxlength="100">
+  </div>
+  <div class="field-group">
+    <label class="field-label" for="inp-email">Email</label>
+    <input id="inp-email" class="field-input" type="email" placeholder="tu@email.com" autocomplete="email" maxlength="150">
+  </div>
+
+  <div class="error-msg" id="intro-error">Por favor completá tu nombre y email para continuar.</div>
+
+  <div class="nav-row" style="justify-content: flex-end;">
+    <button class="btn btn-primary" onclick="startTest()">Comenzar <span class="arrow">→</span></button>
+  </div>
+</div>
+
+<!-- PANTALLA SECCIÓN 1 -->
+<div id="screen-1" class="screen">
+  <div class="section-header">
+    <div class="section-tag">Sección 1 de 3</div>
+    <div class="section-title">Liderazgo</div>
+    <div class="section-count">Preguntas 1 a 18</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-meta"><span>Progreso en esta sección</span><span id="prog-pct-1">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill-1" style="width:0%"></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque A</div>
+    <div id="q1" class="question-card"><div class="question-num">Pregunta 1 de 48</div><div class="question-text">Cuando necesitás decirle a alguien de tu equipo que algo no está funcionando, ¿con qué frecuencia lo hacés en el momento en que ocurre?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q1" id="q1-1" value="1"><label for="q1-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q1" id="q1-2" value="2"><label for="q1-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q1" id="q1-3" value="3"><label for="q1-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q1" id="q1-4" value="4"><label for="q1-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q1" id="q1-5" value="5"><label for="q1-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q2" class="question-card"><div class="question-num">Pregunta 2 de 48</div><div class="question-text">Cuando diste un feedback difícil, ¿en qué medida sentís que la conversación logró el efecto que buscabas?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q2" id="q2-1" value="1"><label for="q2-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q2" id="q2-2" value="2"><label for="q2-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q2" id="q2-3" value="3"><label for="q2-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q2" id="q2-4" value="4"><label for="q2-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q2" id="q2-5" value="5"><label for="q2-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q3" class="question-card"><div class="question-num">Pregunta 3 de 48</div><div class="question-text">Cuando tenés que hablarle a alguien sobre algo que ya señalaste antes y sigue sin cambiar, ¿con qué frecuencia lográs encarar esa conversación sin evitarla o postergarla?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q3" id="q3-1" value="1"><label for="q3-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q3" id="q3-2" value="2"><label for="q3-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q3" id="q3-3" value="3"><label for="q3-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q3" id="q3-4" value="4"><label for="q3-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q3" id="q3-5" value="5"><label for="q3-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque B</div>
+    <div id="q4" class="question-card"><div class="question-num">Pregunta 4 de 48</div><div class="question-text">Cuando asignás una tarea a alguien de tu equipo, ¿con qué frecuencia podés correrte y dejar que la persona la resuelva a su manera?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q4" id="q4-1" value="1"><label for="q4-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q4" id="q4-2" value="2"><label for="q4-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q4" id="q4-3" value="3"><label for="q4-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q4" id="q4-4" value="4"><label for="q4-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q4" id="q4-5" value="5"><label for="q4-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q5" class="question-card"><div class="question-num">Pregunta 5 de 48</div><div class="question-text">"Es más rápido si lo hago yo." ¿Con qué frecuencia aparece este pensamiento cuando tenés que delegar algo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q5" id="q5-1" value="5"><label for="q5-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q5" id="q5-2" value="4"><label for="q5-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q5" id="q5-3" value="3"><label for="q5-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q5" id="q5-4" value="2"><label for="q5-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q5" id="q5-5" value="1"><label for="q5-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q6" class="question-card"><div class="question-num">Pregunta 6 de 48</div><div class="question-text">Cuando delegás una tarea y el resultado no es exactamente como lo hubieras hecho vos, ¿con qué frecuencia lo aceptás sin intervenir para corregirlo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q6" id="q6-1" value="1"><label for="q6-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q6" id="q6-2" value="2"><label for="q6-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q6" id="q6-3" value="3"><label for="q6-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q6" id="q6-4" value="4"><label for="q6-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q6" id="q6-5" value="5"><label for="q6-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque C</div>
+    <div id="q7" class="question-card"><div class="question-num">Pregunta 7 de 48</div><div class="question-text">Cuando atravesás una situación de alta presión en el trabajo, ¿con qué frecuencia lográs que no impacte en cómo tratás a tu equipo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q7" id="q7-1" value="1"><label for="q7-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q7" id="q7-2" value="2"><label for="q7-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q7" id="q7-3" value="3"><label for="q7-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q7" id="q7-4" value="4"><label for="q7-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q7" id="q7-5" value="5"><label for="q7-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q8" class="question-card"><div class="question-num">Pregunta 8 de 48</div><div class="question-text">¿En qué medida sentís que te permitís mostrar vulnerabilidad o cansancio frente a las personas que liderás?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q8" id="q8-1" value="1"><label for="q8-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q8" id="q8-2" value="2"><label for="q8-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q8" id="q8-3" value="3"><label for="q8-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q8" id="q8-4" value="4"><label for="q8-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q8" id="q8-5" value="5"><label for="q8-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q9" class="question-card"><div class="question-num">Pregunta 9 de 48</div><div class="question-text">Cuando una situación del trabajo te genera enojo o frustración, ¿con qué frecuencia lográs procesarla antes de reaccionar frente a tu equipo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q9" id="q9-1" value="1"><label for="q9-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q9" id="q9-2" value="2"><label for="q9-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q9" id="q9-3" value="3"><label for="q9-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q9" id="q9-4" value="4"><label for="q9-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q9" id="q9-5" value="5"><label for="q9-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque D</div>
+    <div id="q10" class="question-card"><div class="question-num">Pregunta 10 de 48</div><div class="question-text">Cuando asumiste una posición de liderazgo, ¿en qué medida sentís que tenías claro qué se esperaba de vos en ese nuevo rol?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q10" id="q10-1" value="1"><label for="q10-1"><span class="scale-num">1</span>Para nada claro</label></div><div class="scale-option"><input type="radio" name="q10" id="q10-2" value="2"><label for="q10-2"><span class="scale-num">2</span>Poco claro</label></div><div class="scale-option"><input type="radio" name="q10" id="q10-3" value="3"><label for="q10-3"><span class="scale-num">3</span>Algo claro</label></div><div class="scale-option"><input type="radio" name="q10" id="q10-4" value="4"><label for="q10-4"><span class="scale-num">4</span>Bastante claro</label></div><div class="scale-option"><input type="radio" name="q10" id="q10-5" value="5"><label for="q10-5"><span class="scale-num">5</span>Muy claro</label></div></div></div>
+    <div id="q11" class="question-card"><div class="question-num">Pregunta 11 de 48</div><div class="question-text">Cuando ascendiste o cambiaste de rol, ¿con qué frecuencia sentiste que seguías siendo "uno más del equipo" en lugar de asumir la nueva posición?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q11" id="q11-1" value="5"><label for="q11-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q11" id="q11-2" value="4"><label for="q11-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q11" id="q11-3" value="3"><label for="q11-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q11" id="q11-4" value="2"><label for="q11-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q11" id="q11-5" value="1"><label for="q11-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q12" class="question-card"><div class="question-num">Pregunta 12 de 48</div><div class="question-text">¿En qué medida sentís que tu equipo te reconoce como referente o figura de autoridad en tu rol actual?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q12" id="q12-1" value="1"><label for="q12-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q12" id="q12-2" value="2"><label for="q12-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q12" id="q12-3" value="3"><label for="q12-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q12" id="q12-4" value="4"><label for="q12-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q12" id="q12-5" value="5"><label for="q12-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque E</div>
+    <div id="q13" class="question-card"><div class="question-num">Pregunta 13 de 48</div><div class="question-text">Cuando tu jefe te baja una directiva con la que no estás del todo de acuerdo, ¿con qué frecuencia lográs comunicarla a tu equipo de manera clara y sostenida?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q13" id="q13-1" value="1"><label for="q13-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q13" id="q13-2" value="2"><label for="q13-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q13" id="q13-3" value="3"><label for="q13-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q13" id="q13-4" value="4"><label for="q13-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q13" id="q13-5" value="5"><label for="q13-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q14" class="question-card"><div class="question-num">Pregunta 14 de 48</div><div class="question-text">¿En qué medida sentís que la información fluye de manera clara entre vos, tu equipo y tus superiores?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q14" id="q14-1" value="1"><label for="q14-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q14" id="q14-2" value="2"><label for="q14-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q14" id="q14-3" value="3"><label for="q14-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q14" id="q14-4" value="4"><label for="q14-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q14" id="q14-5" value="5"><label for="q14-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q15" class="question-card"><div class="question-num">Pregunta 15 de 48</div><div class="question-text">Cuando tu equipo te plantea una queja o problema que depende de una decisión de tus superiores, ¿con qué frecuencia lográs gestionar esa situación sin quedar en el medio?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q15" id="q15-1" value="1"><label for="q15-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q15" id="q15-2" value="2"><label for="q15-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q15" id="q15-3" value="3"><label for="q15-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q15" id="q15-4" value="4"><label for="q15-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q15" id="q15-5" value="5"><label for="q15-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque F</div>
+    <div id="q16" class="question-card"><div class="question-num">Pregunta 16 de 48</div><div class="question-text">Cuando no podés ver directamente lo que está haciendo tu equipo, ¿con qué frecuencia confiás en que están cumpliendo sin necesidad de controlarlo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q16" id="q16-1" value="1"><label for="q16-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q16" id="q16-2" value="2"><label for="q16-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q16" id="q16-3" value="3"><label for="q16-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q16" id="q16-4" value="4"><label for="q16-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q16" id="q16-5" value="5"><label for="q16-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q17" class="question-card"><div class="question-num">Pregunta 17 de 48</div><div class="question-text">¿En qué medida las personas de tu equipo tienen claro qué se espera de ellas en su rol — qué tienen que hacer, cómo y con qué criterios?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q17" id="q17-1" value="1"><label for="q17-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q17" id="q17-2" value="2"><label for="q17-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q17" id="q17-3" value="3"><label for="q17-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q17" id="q17-4" value="4"><label for="q17-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q17" id="q17-5" value="5"><label for="q17-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q18" class="question-card"><div class="question-num">Pregunta 18 de 48</div><div class="question-text">¿Con qué frecuencia generás espacios concretos para saber cómo está tu equipo sin que eso se convierta en control?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q18" id="q18-1" value="1"><label for="q18-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q18" id="q18-2" value="2"><label for="q18-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q18" id="q18-3" value="3"><label for="q18-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q18" id="q18-4" value="4"><label for="q18-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q18" id="q18-5" value="5"><label for="q18-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="error-msg" id="error-1">Por favor respondé todas las preguntas de esta sección antes de continuar.</div>
+  <div class="nav-row">
+    <button class="btn" onclick="goTo('screen-intro')"><span class="arrow">←</span> Anterior</button>
+    <button class="btn btn-primary" onclick="nextScreen('screen-1','screen-2',1,18,1)">Continuar <span class="arrow">→</span></button>
+  </div>
+</div>
+
+<!-- PANTALLA SECCIÓN 2 -->
+<div id="screen-2" class="screen">
+  <div class="section-header">
+    <div class="section-tag">Sección 2 de 3</div>
+    <div class="section-title">Orden y foco</div>
+    <div class="section-count">Preguntas 19 a 33</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-meta"><span>Progreso en esta sección</span><span id="prog-pct-2">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill-2" style="width:0%"></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque G</div>
+    <div id="q19" class="question-card"><div class="question-num">Pregunta 19 de 48</div><div class="question-text">¿Con qué frecuencia terminás el día habiendo hecho lo que tenías planificado hacer?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q19" id="q19-1" value="1"><label for="q19-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q19" id="q19-2" value="2"><label for="q19-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q19" id="q19-3" value="3"><label for="q19-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q19" id="q19-4" value="4"><label for="q19-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q19" id="q19-5" value="5"><label for="q19-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q20" class="question-card"><div class="question-num">Pregunta 20 de 48</div><div class="question-text">¿En qué medida contás con un sistema concreto (agenda, lista, herramienta) para organizar tus tareas y compromisos?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q20" id="q20-1" value="1"><label for="q20-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q20" id="q20-2" value="2"><label for="q20-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q20" id="q20-3" value="3"><label for="q20-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q20" id="q20-4" value="4"><label for="q20-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q20" id="q20-5" value="5"><label for="q20-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q21" class="question-card"><div class="question-num">Pregunta 21 de 48</div><div class="question-text">Cuando surge algo urgente e inesperado en tu día, ¿con qué frecuencia lográs reorganizarte sin que eso te genere sensación de caos o descontrol?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q21" id="q21-1" value="1"><label for="q21-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q21" id="q21-2" value="2"><label for="q21-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q21" id="q21-3" value="3"><label for="q21-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q21" id="q21-4" value="4"><label for="q21-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q21" id="q21-5" value="5"><label for="q21-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque H</div>
+    <div id="q22" class="question-card"><div class="question-num">Pregunta 22 de 48</div><div class="question-text">Cuando tenés muchas cosas para hacer, ¿con qué frecuencia lográs identificar cuál es la tarea que más impacto tiene y arrancar por ahí?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q22" id="q22-1" value="1"><label for="q22-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q22" id="q22-2" value="2"><label for="q22-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q22" id="q22-3" value="3"><label for="q22-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q22" id="q22-4" value="4"><label for="q22-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q22" id="q22-5" value="5"><label for="q22-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q23" class="question-card"><div class="question-num">Pregunta 23 de 48</div><div class="question-text">¿Con qué frecuencia terminás el día con la sensación de haber estado muy ocupado pero sin haber avanzado en lo que realmente importaba?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q23" id="q23-1" value="5"><label for="q23-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q23" id="q23-2" value="4"><label for="q23-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q23" id="q23-3" value="3"><label for="q23-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q23" id="q23-4" value="2"><label for="q23-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q23" id="q23-5" value="1"><label for="q23-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q24" class="question-card"><div class="question-num">Pregunta 24 de 48</div><div class="question-text">Cuando estás trabajando en algo importante y aparece una interrupción, ¿con qué frecuencia lográs retomar el foco sin que eso te desorganice el resto del día?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q24" id="q24-1" value="1"><label for="q24-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q24" id="q24-2" value="2"><label for="q24-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q24" id="q24-3" value="3"><label for="q24-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q24" id="q24-4" value="4"><label for="q24-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q24" id="q24-5" value="5"><label for="q24-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque I</div>
+    <div id="q25" class="question-card"><div class="question-num">Pregunta 25 de 48</div><div class="question-text">Cuando tenés una idea o un proyecto nuevo, ¿con qué frecuencia lográs traducirlo en pasos concretos y empezar a ejecutarlo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q25" id="q25-1" value="1"><label for="q25-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q25" id="q25-2" value="2"><label for="q25-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q25" id="q25-3" value="3"><label for="q25-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q25" id="q25-4" value="4"><label for="q25-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q25" id="q25-5" value="5"><label for="q25-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q26" class="question-card"><div class="question-num">Pregunta 26 de 48</div><div class="question-text">¿Con qué frecuencia tenés proyectos o ideas iniciados que no terminan de avanzar porque aparecen otros nuevos?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q26" id="q26-1" value="5"><label for="q26-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q26" id="q26-2" value="4"><label for="q26-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q26" id="q26-3" value="3"><label for="q26-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q26" id="q26-4" value="2"><label for="q26-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q26" id="q26-5" value="1"><label for="q26-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q27" class="question-card"><div class="question-num">Pregunta 27 de 48</div><div class="question-text">Cuando tenés que transformar un objetivo grande en acciones concretas, ¿en qué medida lográs hacerlo sin quedarte trabado en el punto de partida?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q27" id="q27-1" value="1"><label for="q27-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q27" id="q27-2" value="2"><label for="q27-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q27" id="q27-3" value="3"><label for="q27-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q27" id="q27-4" value="4"><label for="q27-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q27" id="q27-5" value="5"><label for="q27-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque J</div>
+    <div id="q28" class="question-card"><div class="question-num">Pregunta 28 de 48</div><div class="question-text">¿En qué medida las personas con las que trabajás tienen claro qué les corresponde hacer a cada una?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q28" id="q28-1" value="1"><label for="q28-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q28" id="q28-2" value="2"><label for="q28-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q28" id="q28-3" value="3"><label for="q28-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q28" id="q28-4" value="4"><label for="q28-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q28" id="q28-5" value="5"><label for="q28-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q29" class="question-card"><div class="question-num">Pregunta 29 de 48</div><div class="question-text">¿Con qué frecuencia terminás haciendo tareas que en realidad le corresponderían a otra persona de tu equipo o entorno?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q29" id="q29-1" value="5"><label for="q29-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q29" id="q29-2" value="4"><label for="q29-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q29" id="q29-3" value="3"><label for="q29-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q29" id="q29-4" value="2"><label for="q29-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q29" id="q29-5" value="1"><label for="q29-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q30" class="question-card"><div class="question-num">Pregunta 30 de 48</div><div class="question-text">Cuando alguien de tu equipo o entorno no cumple con lo que le corresponde, ¿con qué frecuencia lo señalás claramente en lugar de resolverlo vos?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q30" id="q30-1" value="1"><label for="q30-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q30" id="q30-2" value="2"><label for="q30-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q30" id="q30-3" value="3"><label for="q30-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q30" id="q30-4" value="4"><label for="q30-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q30" id="q30-5" value="5"><label for="q30-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque K</div>
+    <div id="q31" class="question-card"><div class="question-num">Pregunta 31 de 48</div><div class="question-text">¿Con qué frecuencia lográs desconectarte del trabajo cuando no estás en horario laboral?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q31" id="q31-1" value="1"><label for="q31-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q31" id="q31-2" value="2"><label for="q31-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q31" id="q31-3" value="3"><label for="q31-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q31" id="q31-4" value="4"><label for="q31-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q31" id="q31-5" value="5"><label for="q31-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q32" class="question-card"><div class="question-num">Pregunta 32 de 48</div><div class="question-text">¿En qué medida sentís que el desorden en tu trabajo impacta en tu vida personal o en tu energía fuera del trabajo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q32" id="q32-1" value="5"><label for="q32-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q32" id="q32-2" value="4"><label for="q32-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q32" id="q32-3" value="3"><label for="q32-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q32" id="q32-4" value="2"><label for="q32-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q32" id="q32-5" value="1"><label for="q32-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q33" class="question-card"><div class="question-num">Pregunta 33 de 48</div><div class="question-text">¿Con qué frecuencia tomás decisiones conscientes sobre qué no vas a hacer para poder enfocarte en lo que sí importa?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q33" id="q33-1" value="1"><label for="q33-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q33" id="q33-2" value="2"><label for="q33-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q33" id="q33-3" value="3"><label for="q33-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q33" id="q33-4" value="4"><label for="q33-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q33" id="q33-5" value="5"><label for="q33-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="error-msg" id="error-2">Por favor respondé todas las preguntas de esta sección antes de continuar.</div>
+  <div class="nav-row">
+    <button class="btn" onclick="goTo('screen-1')"><span class="arrow">←</span> Anterior</button>
+    <button class="btn btn-primary" onclick="nextScreen('screen-2','screen-3',19,33,2)">Continuar <span class="arrow">→</span></button>
+  </div>
+</div>
+
+<!-- PANTALLA SECCIÓN 3 -->
+<div id="screen-3" class="screen">
+  <div class="section-header">
+    <div class="section-tag">Sección 3 de 3</div>
+    <div class="section-title">Desarrollo del líder</div>
+    <div class="section-count">Preguntas 34 a 48</div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-meta"><span>Progreso en esta sección</span><span id="prog-pct-3">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill-3" style="width:0%"></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque L</div>
+    <div id="q34" class="question-card"><div class="question-num">Pregunta 34 de 48</div><div class="question-text">¿Con qué frecuencia buscás activamente espacios de aprendizaje o acompañamiento para seguir desarrollándote como líder?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q34" id="q34-1" value="1"><label for="q34-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q34" id="q34-2" value="2"><label for="q34-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q34" id="q34-3" value="3"><label for="q34-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q34" id="q34-4" value="4"><label for="q34-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q34" id="q34-5" value="5"><label for="q34-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q35" class="question-card"><div class="question-num">Pregunta 35 de 48</div><div class="question-text">Cuando enfrentás una situación difícil en tu rol, ¿con qué frecuencia sentís que tenés a alguien con quien procesarla?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q35" id="q35-1" value="1"><label for="q35-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q35" id="q35-2" value="2"><label for="q35-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q35" id="q35-3" value="3"><label for="q35-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q35" id="q35-4" value="4"><label for="q35-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q35" id="q35-5" value="5"><label for="q35-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q36" class="question-card"><div class="question-num">Pregunta 36 de 48</div><div class="question-text">¿En qué medida sentís que actualmente tu crecimiento como líder depende principalmente de vos, sin tener referentes o espacios de desarrollo que te acompañen?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q36" id="q36-1" value="5"><label for="q36-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q36" id="q36-2" value="4"><label for="q36-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q36" id="q36-3" value="3"><label for="q36-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q36" id="q36-4" value="2"><label for="q36-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q36" id="q36-5" value="1"><label for="q36-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque M</div>
+    <div id="q37" class="question-card"><div class="question-num">Pregunta 37 de 48</div><div class="question-text">¿En qué medida tenés claro cuál es el próximo paso que querés dar en tu carrera profesional?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q37" id="q37-1" value="1"><label for="q37-1"><span class="scale-num">1</span>Para nada claro</label></div><div class="scale-option"><input type="radio" name="q37" id="q37-2" value="2"><label for="q37-2"><span class="scale-num">2</span>Poco claro</label></div><div class="scale-option"><input type="radio" name="q37" id="q37-3" value="3"><label for="q37-3"><span class="scale-num">3</span>Algo claro</label></div><div class="scale-option"><input type="radio" name="q37" id="q37-4" value="4"><label for="q37-4"><span class="scale-num">4</span>Bastante claro</label></div><div class="scale-option"><input type="radio" name="q37" id="q37-5" value="5"><label for="q37-5"><span class="scale-num">5</span>Muy claro</label></div></div></div>
+    <div id="q38" class="question-card"><div class="question-num">Pregunta 38 de 48</div><div class="question-text">¿Con qué frecuencia dedicás tiempo a pensar en tu propio desarrollo profesional — no en el de tu equipo o proyecto, sino en el tuyo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q38" id="q38-1" value="1"><label for="q38-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q38" id="q38-2" value="2"><label for="q38-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q38" id="q38-3" value="3"><label for="q38-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q38" id="q38-4" value="4"><label for="q38-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q38" id="q38-5" value="5"><label for="q38-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q39" class="question-card"><div class="question-num">Pregunta 39 de 48</div><div class="question-text">¿En qué medida sentís que las decisiones que tomás hoy en tu carrera están alineadas con donde querés llegar?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q39" id="q39-1" value="1"><label for="q39-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q39" id="q39-2" value="2"><label for="q39-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q39" id="q39-3" value="3"><label for="q39-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q39" id="q39-4" value="4"><label for="q39-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q39" id="q39-5" value="5"><label for="q39-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque N</div>
+    <div id="q40" class="question-card"><div class="question-num">Pregunta 40 de 48</div><div class="question-text">Cuando algo en tu rol se te complica, ¿con qué frecuencia podés reconocerlo abiertamente y pedir ayuda o apoyo?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q40" id="q40-1" value="1"><label for="q40-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q40" id="q40-2" value="2"><label for="q40-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q40" id="q40-3" value="3"><label for="q40-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q40" id="q40-4" value="4"><label for="q40-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q40" id="q40-5" value="5"><label for="q40-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q41" class="question-card"><div class="question-num">Pregunta 41 de 48</div><div class="question-text">¿En qué medida sentís que tenés que sostener a todos a tu alrededor sin que nadie te sostenga a vos?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q41" id="q41-1" value="5"><label for="q41-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q41" id="q41-2" value="4"><label for="q41-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q41" id="q41-3" value="3"><label for="q41-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q41" id="q41-4" value="2"><label for="q41-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q41" id="q41-5" value="1"><label for="q41-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q42" class="question-card"><div class="question-num">Pregunta 42 de 48</div><div class="question-text">Cuando cometés un error en tu rol, ¿con qué frecuencia podés reconocerlo frente a tu equipo o superiores sin que eso te genere una carga excesiva?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q42" id="q42-1" value="1"><label for="q42-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q42" id="q42-2" value="2"><label for="q42-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q42" id="q42-3" value="3"><label for="q42-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q42" id="q42-4" value="4"><label for="q42-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q42" id="q42-5" value="5"><label for="q42-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque O</div>
+    <div id="q43" class="question-card"><div class="question-num">Pregunta 43 de 48</div><div class="question-text">¿Con qué frecuencia lográs identificar cuándo estás llegando a tu límite antes de que se vuelva un problema?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q43" id="q43-1" value="1"><label for="q43-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q43" id="q43-2" value="2"><label for="q43-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q43" id="q43-3" value="3"><label for="q43-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q43" id="q43-4" value="4"><label for="q43-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q43" id="q43-5" value="5"><label for="q43-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+    <div id="q44" class="question-card"><div class="question-num">Pregunta 44 de 48</div><div class="question-text">¿En qué medida sentís que el rol que ocupás hoy te permite disfrutar de lo que hacés, no solo cumplir con lo que se espera?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q44" id="q44-1" value="1"><label for="q44-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q44" id="q44-2" value="2"><label for="q44-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q44" id="q44-3" value="3"><label for="q44-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q44" id="q44-4" value="4"><label for="q44-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q44" id="q44-5" value="5"><label for="q44-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q45" class="question-card"><div class="question-num">Pregunta 45 de 48</div><div class="question-text">¿Con qué frecuencia priorizás tu propio bienestar sin sentir que eso va en contra de tu responsabilidad como líder?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q45" id="q45-1" value="1"><label for="q45-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q45" id="q45-2" value="2"><label for="q45-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q45" id="q45-3" value="3"><label for="q45-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q45" id="q45-4" value="4"><label for="q45-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q45" id="q45-5" value="5"><label for="q45-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="subarista-block">
+    <div class="subarista-label">Bloque P</div>
+    <div id="q46" class="question-card"><div class="question-num">Pregunta 46 de 48</div><div class="question-text">¿En qué medida sentís que tenés claro qué tipo de líder querés ser — más allá de los resultados que tenés que alcanzar?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q46" id="q46-1" value="1"><label for="q46-1"><span class="scale-num">1</span>Para nada claro</label></div><div class="scale-option"><input type="radio" name="q46" id="q46-2" value="2"><label for="q46-2"><span class="scale-num">2</span>Poco claro</label></div><div class="scale-option"><input type="radio" name="q46" id="q46-3" value="3"><label for="q46-3"><span class="scale-num">3</span>Algo claro</label></div><div class="scale-option"><input type="radio" name="q46" id="q46-4" value="4"><label for="q46-4"><span class="scale-num">4</span>Bastante claro</label></div><div class="scale-option"><input type="radio" name="q46" id="q46-5" value="5"><label for="q46-5"><span class="scale-num">5</span>Muy claro</label></div></div></div>
+    <div id="q47" class="question-card"><div class="question-num">Pregunta 47 de 48</div><div class="question-text">Cuando tomás decisiones difíciles que afectan a personas de tu equipo, ¿en qué medida sentís que actuás en línea con los valores que querés encarnar como líder?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q47" id="q47-1" value="1"><label for="q47-1"><span class="scale-num">1</span>Para nada</label></div><div class="scale-option"><input type="radio" name="q47" id="q47-2" value="2"><label for="q47-2"><span class="scale-num">2</span>Poco</label></div><div class="scale-option"><input type="radio" name="q47" id="q47-3" value="3"><label for="q47-3"><span class="scale-num">3</span>Algo</label></div><div class="scale-option"><input type="radio" name="q47" id="q47-4" value="4"><label for="q47-4"><span class="scale-num">4</span>Bastante</label></div><div class="scale-option"><input type="radio" name="q47" id="q47-5" value="5"><label for="q47-5"><span class="scale-num">5</span>Totalmente</label></div></div></div>
+    <div id="q48" class="question-card"><div class="question-num">Pregunta 48 de 48</div><div class="question-text">¿Con qué frecuencia sentís que el líder que sos hoy refleja el líder que querés ser?</div><div class="scale-options"><div class="scale-option"><input type="radio" name="q48" id="q48-1" value="1"><label for="q48-1"><span class="scale-num">1</span>Nunca</label></div><div class="scale-option"><input type="radio" name="q48" id="q48-2" value="2"><label for="q48-2"><span class="scale-num">2</span>Pocas veces</label></div><div class="scale-option"><input type="radio" name="q48" id="q48-3" value="3"><label for="q48-3"><span class="scale-num">3</span>A veces</label></div><div class="scale-option"><input type="radio" name="q48" id="q48-4" value="4"><label for="q48-4"><span class="scale-num">4</span>Frecuentemente</label></div><div class="scale-option"><input type="radio" name="q48" id="q48-5" value="5"><label for="q48-5"><span class="scale-num">5</span>Siempre</label></div></div></div>
+  </div>
+
+  <div class="error-msg" id="error-3">Por favor respondé todas las preguntas de esta sección antes de enviar.</div>
+  <div class="nav-row">
+    <button class="btn" onclick="goTo('screen-2')"><span class="arrow">←</span> Anterior</button>
+    <button class="btn btn-primary" id="btn-submit" onclick="submitTest()">Enviar respuestas <span class="arrow">→</span></button>
+  </div>
+</div>
+
+<!-- PANTALLA GRACIAS -->
+<div id="screen-thanks" class="screen">
+  <div class="thanks-wrap">
+    <div class="thanks-icon">
+      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13L10 18L21 7" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Muchas gracias por tu tiempo.</h2>
+    <div class="thanks-accent"></div>
+    <p>Tus respuestas fueron enviadas. Daniela va a trabajar sobre los resultados del Test y conversarán sobre el informe en el primer encuentro.</p>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+  senso Consultora &nbsp;·&nbsp; <span id="footer-year"></span>
+</footer>
+
+<script>
+const subaristaDef = [
+  { id: "1.1", label: "Feedback / Comunicación", qs: [1,2,3] },
+  { id: "1.2", label: "Delegación", qs: [4,5,6] },
+  { id: "1.3", label: "Gestión de emociones en el rol", qs: [7,8,9] },
+  { id: "1.4", label: "Transición en el rol y construcción de autoridad", qs: [10,11,12] },
+  { id: "1.5", label: "Trampa del mando medio", qs: [13,14,15] },
+  { id: "1.6", label: "Liderar a distancia", qs: [16,17,18] },
+  { id: "2.1", label: "Herramientas de planificación", qs: [19,20,21] },
+  { id: "2.2", label: "Priorización y foco", qs: [22,23,24] },
+  { id: "2.3", label: "Del caos de ideas a la acción concreta", qs: [25,26,27] },
+  { id: "2.4", label: "Estructura, roles y límites difusos", qs: [28,29,30] },
+  { id: "2.5", label: "Balance vida-trabajo", qs: [31,32,33] },
+  { id: "3.1", label: "El líder sin acompañamiento", qs: [34,35,36] },
+  { id: "3.2", label: "Plan de carrera y proyección", qs: [37,38,39] },
+  { id: "3.3", label: "El peso de tener que poder", qs: [40,41,42] },
+  { id: "3.4", label: "Sostener el rol sin quemarte", qs: [43,44,45] },
+  { id: "3.5", label: "Identidad de liderazgo", qs: [46,47,48] }
+];
+
+function getVal(n) {
+  const sel = document.querySelector('input[name="q'+n+'"]:checked');
+  return sel ? parseInt(sel.value) : null;
+}
+
+function calcResults() {
+  return subaristaDef.map(sa => {
+    const vals = sa.qs.map(getVal).filter(v => v !== null);
+    const avg = vals.length === 3 ? (vals[0]+vals[1]+vals[2])/3 : null;
+    let area = null;
+    if (avg !== null) {
+      if (avg <= 2.5) area = "Área de Mejora";
+      else if (avg <= 3.5) area = "Área de Desarrollo";
+      else area = "Área de Fortaleza";
+    }
+    return { subarista: sa.id, label: sa.label, avg: avg ? avg.toFixed(2) : null, area };
+  });
+}
+
+function validateRange(from, to) {
+  let ok = true;
+  for (let i = from; i <= to; i++) {
+    const sel = document.querySelector('input[name="q'+i+'"]:checked');
+    const card = document.getElementById('q'+i);
+    if (!sel) { card.classList.add('unanswered'); ok = false; }
+    else card.classList.remove('unanswered');
+  }
+  return ok;
+}
+
+function updateProgress(fillId, pctId, nums) {
+  const answered = nums.filter(i => document.querySelector('input[name="q'+i+'"]:checked')).length;
+  const pct = Math.round((answered / nums.length) * 100);
+  document.getElementById(fillId).style.width = pct + '%';
+  document.getElementById(pctId).textContent = pct + '%';
+}
+
+function goTo(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function sanitize(str) {
+  return str.replace(/[<>&"'`]/g, '').trim().slice(0, 200);
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function startTest() {
+  const nombreRaw = document.getElementById('inp-nombre').value.trim();
+  const emailRaw = document.getElementById('inp-email').value.trim();
+  const nombre = sanitize(nombreRaw);
+  const email = sanitize(emailRaw);
+  const err = document.getElementById('intro-error');
+  if (!nombre || !email || !validateEmail(email)) { err.classList.add('show'); return; }
+  err.classList.remove('show');
+  goTo('screen-1');
+}
+
+function nextScreen(currentId, nextId, from, to, secNum) {
+  const errEl = document.getElementById('error-'+secNum);
+  if (!validateRange(from, to)) { errEl.classList.add('show'); return; }
+  errEl.classList.remove('show');
+  goTo(nextId);
+}
+
+let submitting = false;
+function submitTest() {
+  if (submitting) return;
+  if (!validateRange(34, 48)) { document.getElementById('error-3').classList.add('show'); return; }
+  document.getElementById('error-3').classList.remove('show');
+  submitting = true;
+  document.getElementById('btn-submit').disabled = true;
+  const nombre = document.getElementById('inp-nombre').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const results = calcResults();
+  const allAnswers = {};
+  for (let i = 1; i <= 48; i++) allAnswers['q'+i] = getVal(i);
+  const payload = { nombre, email, timestamp: new Date().toISOString(), respuestas: allAnswers, resultados: results };
+
+  fetch("https://script.google.com/macros/s/AKfycbwnXm6am6VU62qYEaTKsA37eYjNGhDKnc16wO6dl5OvxQlyKK5aARFgLBVl8kYvtKfR/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  })
+  .catch(function() {
+    // Si hay error de red, igual mostramos la pantalla de gracias
+  })
+  .finally(function() {
+    goTo('screen-thanks');
+  });
+}
+
+const q1to18 = Array.from({length:18}, (_,i)=>i+1);
+const q19to33 = Array.from({length:15}, (_,i)=>i+19);
+const q34to48 = Array.from({length:15}, (_,i)=>i+34);
+
+document.querySelectorAll('input[type="radio"]').forEach(radio => {
+  radio.addEventListener('change', function() {
+    const n = parseInt(this.name.replace('q',''));
+    document.getElementById('q'+n).classList.remove('unanswered');
+    if (n <= 18) updateProgress('prog-fill-1','prog-pct-1', q1to18);
+    else if (n <= 33) updateProgress('prog-fill-2','prog-pct-2', q19to33);
+    else updateProgress('prog-fill-3','prog-pct-3', q34to48);
+  });
+});
+</script>
+<script>document.getElementById("footer-year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -393,6 +393,8 @@
     .page-title h1 { font-size: 21px; }
     .btn { padding: 10px 16px; font-size: 13px; }
   }
+  .dot-anim::after { content: ''; animation: dots 1.2s steps(4, end) infinite; }
+  @keyframes dots { 0%, 20% { content: ''; } 40% { content: '.'; } 60% { content: '..'; } 80%, 100% { content: '...'; } }
 </style>
 </head>
 <body>
@@ -721,7 +723,9 @@ function submitTest() {
   if (!validateRange(34, 48)) { document.getElementById('error-3').classList.add('show'); return; }
   document.getElementById('error-3').classList.remove('show');
   submitting = true;
-  document.getElementById('btn-submit').disabled = true;
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = 'Enviando<span class="dot-anim">...</span>';
   const nombre = document.getElementById('inp-nombre').value.trim();
   const email = document.getElementById('inp-email').value.trim();
   const results = calcResults();
